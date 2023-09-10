@@ -1,5 +1,5 @@
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const app = express();
@@ -28,7 +28,11 @@ const verifyJWT = (req, res, next) => {
   if (!authorization) {
     return res
       .status(401)
-      .send({ error: true, message: "This is Optimus Prime .you are under Arrest for  unauthorized access" });
+      .send({
+        error: true,
+        message:
+          "This is Optimus Prime .you are under Arrest for  unauthorized access",
+      });
   }
   const token = authorization.split(" ")[1];
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY, (error, decoded) => {
@@ -89,15 +93,20 @@ async function run() {
     });
 
     //---------------- Booking Api -------------------//
-                      
+
     //Read some Booking Data
     app.get("/bookings", verifyJWT, async (req, res) => {
       const decoded = req.decoded;
-      //this is for check the decoded vs and query email 
+      //this is for check the decoded vs and query email
       if (decoded.email !== req.query.email) {
-         return res.status(403).send({error : true, message :"you have no right to access other data "})
+        return res
+          .status(403)
+          .send({
+            error: true,
+            message: "you have no right to access other data ",
+          });
       }
-      console.log("Optimus came from cyberton",decoded );
+      console.log("Optimus came from cyberton", decoded);
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };
